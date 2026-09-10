@@ -7,15 +7,21 @@ import java.util.Random;
 
 public class Main extends JPanel implements KeyListener {
 
+
+    int puntaje = 0;
+    int alturaBarra = 50;
+    Image pasura;
+
+
     //cuadro
     int x = 400;
     int y = 450;
 
-    int velocidad = 11;
+    int velocidad = 15;
 
     //cir
     int circuloX;
-    int circuloY =0;
+    int circuloY = alturaBarra;
 
     int velocidadCaida = 18;
 
@@ -26,6 +32,8 @@ public class Main extends JPanel implements KeyListener {
         addKeyListener(this);
         //aleaorio
         circuloX = random6.nextInt(600);
+
+        pasura = new ImageIcon("src/imagenes/pasura.png").getImage();
     }
 
     @Override 
@@ -36,6 +44,15 @@ public class Main extends JPanel implements KeyListener {
 
         g.setColor(Color.decode("#000000"));
         g.fillRect(0, 0, getWidth(), getHeight());
+
+        //barra
+        g.setColor(Color.decode("#f8f8f8"));
+        g.fillRect(0, 0, getWidth(), alturaBarra);
+
+        //ppuntaje
+        g.setColor(Color.decode("#000000"));
+        g.setFont(new Font("Arial", Font.BOLD, 24));
+        g.drawString("Puntaje: " + puntaje, 650, 32);
 
         // piso
         g.setColor(Color.GRAY);
@@ -48,12 +65,27 @@ public class Main extends JPanel implements KeyListener {
         //c
         g.setColor(Color.WHITE);
         g.fillOval(circuloX, circuloY, 30, 30);
+
+        // imagen encima del círculo
+        g.drawImage(pasura, circuloX, circuloY, 30, 30, this);
     }
 
     //m6ov5im6iento
 
     public void actualizar() {
         circuloY += velocidadCaida;
+
+        Rectangle jugador = new Rectangle(x, y, 50, 50);
+        Rectangle circulo = new Rectangle(circuloX, circuloY, 30, 30);
+
+        if(jugador.intersects(circulo)) {
+
+            puntaje++;
+
+            circuloY = 0;
+            circuloX = random6.nextInt(600);
+        }
+        
 
         if(circuloY > 500) {
             circuloY = 0;
